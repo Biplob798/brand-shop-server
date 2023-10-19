@@ -39,9 +39,15 @@ async function run() {
 
         const productCollection = client.db('productDB').collection('product')
 
+        // get data from database 
+        app.get('/product', async (req, res) => {
+            const cursor = productCollection.find()
+            const result = await cursor.toArray()
+            res.send(result)
+            console.log(result)
+        })
 
-
-        // create/post data in server 
+        // create/post data in server g
 
         app.post('/product', async (req, res) => {
             const newProduct = req.body
