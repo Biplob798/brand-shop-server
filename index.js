@@ -39,6 +39,7 @@ async function run() {
 
         const productCollection = client.db('productDB').collection('product')
         const brandCollection = client.db('productDB').collection('brand')
+        const cartCollection = client.db('cartDB').collection('cart')
 
 
 
@@ -47,13 +48,7 @@ async function run() {
 
 
 
-        // // get data from database 
-        // app.get('/product', async (req, res) => {
-        //     const cursor = productCollection.find()
-        //     const result = await cursor.toArray()
-        //     res.send(result)
-        //     console.log(result)
-        // })
+
 
         // get all data from database  to show home page
         app.get('/product', async (req, res) => {
@@ -80,26 +75,17 @@ async function run() {
 
         //  get data for dynamic id route to show brand product
 
-
-        app.get("/product/:id", async (req, res) => {
-            const id = req.params.id;
-            console.log(id)
-            const query = { _id: new ObjectId(id) }
-            const cursor = productCollection.find(query);
-            const result = await cursor.toArray(cursor);
-            console.log(result)
-            res.send(result)
-        })
-
-        // get id for view card to dynamic route 
-
-
-        app.get('/viewDetails/:id', async (req, res) => {
+        app.get('/product/:id', async (req, res) => {
             const id = req.params.id
             const query = { _id: new ObjectId(id) }
             const result = await productCollection.findOne(query)
             res.send(result)
+            console.log(result)
         })
+
+
+
+
 
         // create/post data in server side
 
@@ -120,21 +106,26 @@ async function run() {
         // })
 
 
-        // get data from database  to show home page optional
-        // app.get('/brand', async (req, res) => {
-        //     const cursor = brandCollection.find()
-        //     const result = await cursor.toArray()
-        //     res.send(result)
-        //     console.log(result)
-        // })
 
 
 
 
 
+        // get data for cart 
 
 
+        app.get("/cart", async (req, res) => {
+            const cursor = cartCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        });
 
+        app.post("/cart", async (req, res) => {
+            const newCart = req.body;
+            console.log(newCart);
+            const result = await cartCollection.insertOne(newCart);
+            res.send(result);
+        });
 
 
 
