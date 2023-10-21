@@ -47,7 +47,15 @@ async function run() {
 
 
 
-        // get data from database 
+        // // get data from database 
+        // app.get('/product', async (req, res) => {
+        //     const cursor = productCollection.find()
+        //     const result = await cursor.toArray()
+        //     res.send(result)
+        //     console.log(result)
+        // })
+
+        // get all data from database  to show home page
         app.get('/product', async (req, res) => {
             const cursor = productCollection.find()
             const result = await cursor.toArray()
@@ -55,7 +63,45 @@ async function run() {
             console.log(result)
         })
 
-        // create/post data in server g
+
+
+        // get data for dynamic brand route to show brand product
+
+        app.get("/product/:brand", async (req, res) => {
+            const brand = req.params.brand;
+            console.log(brand)
+            const query = { brand: brand }
+            const cursor = productCollection.find(query);
+            const result = await cursor.toArray(cursor);
+            console.log(result)
+            res.send(result)
+        })
+
+
+        //  get data for dynamic id route to show brand product
+
+
+        app.get("/product/:id", async (req, res) => {
+            const id = req.params.id;
+            console.log(id)
+            const query = { _id: new ObjectId(id) }
+            const cursor = productCollection.find(query);
+            const result = await cursor.toArray(cursor);
+            console.log(result)
+            res.send(result)
+        })
+
+        // get id for view card to dynamic route 
+
+
+        app.get('/viewDetails/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await productCollection.findOne(query)
+            res.send(result)
+        })
+
+        // create/post data in server side
 
         app.post('/product', async (req, res) => {
             const newProduct = req.body
@@ -66,31 +112,22 @@ async function run() {
 
 
         // brands data 
-        app.post('/brand', async (req, res) => {
-            const newBrand = req.body
-            console.log(newBrand)
-            const result = await brandCollection.insertOne(newBrand)
-            res.send(result)
-        })
-
-        // get data for dynamic id route 
-
-        app.get('/product/:id', async (req, res) => {
-            const id = req.params.id
-            const query = { _id: new ObjectId(id) }
-            const result = await productCollection.findOne(query)
-            res.send(result)
-        })
+        // app.post('/brand', async (req, res) => {
+        //     const newBrand = req.body
+        //     console.log(newBrand)
+        //     const result = await brandCollection.insertOne(newBrand)
+        //     res.send(result)
+        // })
 
 
+        // get data from database  to show home page optional
+        // app.get('/brand', async (req, res) => {
+        //     const cursor = brandCollection.find()
+        //     const result = await cursor.toArray()
+        //     res.send(result)
+        //     console.log(result)
+        // })
 
-        // get data from database 
-        app.get('/brand', async (req, res) => {
-            const cursor = brandCollection.find()
-            const result = await cursor.toArray()
-            res.send(result)
-            console.log(result)
-        })
 
 
 
