@@ -94,6 +94,34 @@ async function run() {
         })
 
 
+        // updateProduct in server 
+
+
+        app.put('/product/:id', async (req, res) => {
+            const id = req.params.id
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true }
+
+            const updateProduct = req.body
+            const updateProductAfter = {
+
+                $set: {
+                    name: updateProduct.name,
+                    price: updateProduct.price,
+                    description: updateProduct.description,
+                    brand: updateProduct.brand,
+                    type: updateProduct.type,
+                    rating: updateProduct.rating,
+                    photo: updateProduct.photo
+
+                }
+            }
+            const result = await productCollection.updateOne(filter, updateProductAfter, options)
+            res.send(result)
+        })
+
+
+
         // brands data 
         // app.post('/brand', async (req, res) => {
         //     const newBrand = req.body
@@ -107,14 +135,26 @@ async function run() {
         // get data for cart 
 
 
+
+
+        // get/read data  for my cart
+
         app.get("/cart", async (req, res) => {
             const cursor = cartCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         });
 
+        // get/read data for update my cart 
 
+        app.get('/card/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await cartCollection.findOne(query)
+            res.send(result)
+        })
 
+        // post data 
 
         app.post("/cart", async (req, res) => {
             const newCart = req.body;
@@ -123,6 +163,19 @@ async function run() {
             res.send(result);
         });
 
+
+        // update data korar jonno aga get data korte hobe 
+
+
+
+
+
+
+
+
+
+
+        // delete data 
 
         app.delete('/cart/:id', async (req, res) => {
             const id = req.params.id
