@@ -84,9 +84,6 @@ async function run() {
         })
 
 
-
-
-
         // create/post data in server side
 
         app.post('/product', async (req, res) => {
@@ -107,10 +104,6 @@ async function run() {
 
 
 
-
-
-
-
         // get data for cart 
 
 
@@ -120,6 +113,9 @@ async function run() {
             res.send(result);
         });
 
+
+
+
         app.post("/cart", async (req, res) => {
             const newCart = req.body;
             console.log(newCart);
@@ -128,7 +124,12 @@ async function run() {
         });
 
 
-
+        app.delete('/cart/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await cartCollection.deleteOne(query)
+            res.send(result)
+        })
 
 
 
