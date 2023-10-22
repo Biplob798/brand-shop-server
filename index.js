@@ -96,29 +96,54 @@ async function run() {
 
         // updateProduct in server 
 
-
-        app.put('/product/:id', async (req, res) => {
-            const id = req.params.id
-            const filter = { _id: new ObjectId(id) }
-            const options = { upsert: true }
-
-            const updateProduct = req.body
-            const updateProductAfter = {
-
+        app.put("/product/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updateProduct = req.body;
+            const product = {
                 $set: {
                     name: updateProduct.name,
-                    price: updateProduct.price,
-                    description: updateProduct.description,
                     brand: updateProduct.brand,
                     type: updateProduct.type,
+                    price: updateProduct.price,
+                    description: updateProduct.description,
                     rating: updateProduct.rating,
-                    photo: updateProduct.photo
+                    photo: updateProduct.photo,
+                },
+            };
+            const result = await productCollection.updateOne(
+                filter,
+                product,
+                options
+            );
+            res.send(result);
+        });
 
-                }
-            }
-            const result = await productCollection.updateOne(filter, updateProductAfter, options)
-            res.send(result)
-        })
+
+
+        // app.put('/product/:id', async (req, res) => {
+        //     const id = req.params.id
+        //     const filter = { _id: new ObjectId(id) }
+        //     const options = { upsert: true }
+
+        //     const updateProduct = req.body
+        //     const updateProductAfter = {
+
+        //         $set: {
+        //             name: updateProduct.name,
+        //             price: updateProduct.price,
+        //             description: updateProduct.description,
+        //             brand: updateProduct.brand,
+        //             type: updateProduct.type,
+        //             rating: updateProduct.rating,
+        //             photo: updateProduct.photo
+
+        //         }
+        //     }
+        //     const result = await productCollection.updateOne(filter, updateProductAfter, options)
+        //     res.send(result)
+        // })
 
 
 
